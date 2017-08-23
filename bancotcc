@@ -1,0 +1,169 @@
+-- MySQL Administrator dump 1.4
+--
+-- ------------------------------------------------------
+-- Server version	5.5.5-10.1.19-MariaDB
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
+
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+
+
+--
+-- Create schema mydb
+--
+
+CREATE DATABASE IF NOT EXISTS mydb;
+USE mydb;
+
+--
+-- Definition of table `aluno`
+--
+
+DROP TABLE IF EXISTS `aluno`;
+CREATE TABLE `aluno` (
+  `nome` varchar(45) NOT NULL,
+  `email` varchar(45) NOT NULL,
+  `senha` varchar(45) NOT NULL,
+  `idAluno` int(15) NOT NULL AUTO_INCREMENT,
+  `codGrupo` varchar(11) NOT NULL,
+  PRIMARY KEY (`idAluno`),
+  KEY `fk_aluno_grupo_idx` (`codGrupo`),
+  CONSTRAINT `fk_aluno_grupo` FOREIGN KEY (`codGrupo`) REFERENCES `grupo` (`codGrupo`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `aluno`
+--
+
+/*!40000 ALTER TABLE `aluno` DISABLE KEYS */;
+INSERT INTO `aluno` (`nome`,`email`,`senha`,`idAluno`,`codGrupo`) VALUES 
+ ('joao','joao@gmail.com','123',1,'e058ddf'),
+ ('joao','joaope@yahoo.com','123',2,'b42687d'),
+ ('lucas','lucas@gmail.com','123',3,'e058ddf'),
+ ('rafael','rafael@gmail.com','123',4,'e058ddf'),
+ ('Felipe','felipe@gmail.com','123',5,'e058ddf');
+/*!40000 ALTER TABLE `aluno` ENABLE KEYS */;
+
+
+--
+-- Definition of table `aprovacao`
+--
+
+DROP TABLE IF EXISTS `aprovacao`;
+CREATE TABLE `aprovacao` (
+  `idaprovacao` int(11) NOT NULL AUTO_INCREMENT,
+  `nome` varchar(80) NOT NULL,
+  `descricao` text NOT NULL,
+  `qtd_alunos` int(11) NOT NULL,
+  `requisitos` text NOT NULL,
+  `grupo` varchar(12) NOT NULL DEFAULT '',
+  PRIMARY KEY (`idaprovacao`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `aprovacao`
+--
+
+/*!40000 ALTER TABLE `aprovacao` DISABLE KEYS */;
+INSERT INTO `aprovacao` (`idaprovacao`,`nome`,`descricao`,`qtd_alunos`,`requisitos`,`grupo`) VALUES 
+ (3,'hsahadu','adhuash',4,'ndsajdnakj','0'),
+ (4,'djaisjdasi','jdisaojdaiso',4,'dsadsja','b42687d');
+/*!40000 ALTER TABLE `aprovacao` ENABLE KEYS */;
+
+
+--
+-- Definition of table `grupo`
+--
+
+DROP TABLE IF EXISTS `grupo`;
+CREATE TABLE `grupo` (
+  `codGrupo` varchar(11) NOT NULL,
+  PRIMARY KEY (`codGrupo`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `grupo`
+--
+
+/*!40000 ALTER TABLE `grupo` DISABLE KEYS */;
+INSERT INTO `grupo` (`codGrupo`) VALUES 
+ ('b42687d'),
+ ('e058ddf');
+/*!40000 ALTER TABLE `grupo` ENABLE KEYS */;
+
+
+--
+-- Definition of table `professor`
+--
+
+DROP TABLE IF EXISTS `professor`;
+CREATE TABLE `professor` (
+  `idProfessor` int(11) NOT NULL AUTO_INCREMENT,
+  `nome` varchar(45) NOT NULL,
+  `email` varchar(45) NOT NULL,
+  `senha` varchar(45) NOT NULL,
+  `curso` varchar(45) NOT NULL,
+  PRIMARY KEY (`idProfessor`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `professor`
+--
+
+/*!40000 ALTER TABLE `professor` DISABLE KEYS */;
+INSERT INTO `professor` (`idProfessor`,`nome`,`email`,`senha`,`curso`) VALUES 
+ (1,'lucas','lucas@gmail.com','123','portugues');
+/*!40000 ALTER TABLE `professor` ENABLE KEYS */;
+
+
+--
+-- Definition of table `projeto`
+--
+
+DROP TABLE IF EXISTS `projeto`;
+CREATE TABLE `projeto` (
+  `idprojeto` int(11) NOT NULL AUTO_INCREMENT,
+  `nome` varchar(80) NOT NULL,
+  `descricao` text NOT NULL,
+  `qtd_alunos` int(11) NOT NULL,
+  `requisitos` text NOT NULL,
+  `codGrupo` varchar(11) DEFAULT NULL,
+  `idProfessor` int(11) DEFAULT NULL,
+  PRIMARY KEY (`idprojeto`),
+  KEY `fk_projeto_grupo1_idx` (`codGrupo`),
+  KEY `fk_projeto_professor1_idx` (`idProfessor`),
+  CONSTRAINT `fk_projeto_grupo1` FOREIGN KEY (`codGrupo`) REFERENCES `grupo` (`codGrupo`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_projeto_professor1` FOREIGN KEY (`idProfessor`) REFERENCES `professor` (`idProfessor`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `projeto`
+--
+
+/*!40000 ALTER TABLE `projeto` DISABLE KEYS */;
+INSERT INTO `projeto` (`idprojeto`,`nome`,`descricao`,`qtd_alunos`,`requisitos`,`codGrupo`,`idProfessor`) VALUES 
+ (1,'Um projeto baseado em criar um site para uma padaria','um projeto para uma padaria, deve incluir os horÃ¡rios que a padaria abre e fecha, reservas, horÃ¡rio que os produtos estÃ£o disponÃ­veis e etc..',4,'SQL, PHP, JavaScript, HTML.',NULL,NULL),
+ (2,'Um projeto baseado em criar um site para uma marcenaria','um projeto para uma marcenaria, deve incluir os horÃ¡rios que a marcenaria abre e fecha, reservas, prazo de entrega e etc..',4,'SQL, PHP, JavaScript, HTML.',NULL,NULL),
+ (3,'um projeto qualquer','um projetinho ai bem daora',4,'mesma coisa dos outros',NULL,NULL),
+ (4,'sas','dsada',4,'dasdasd',NULL,NULL),
+ (5,'sas','dsada',4,'dasdasd',NULL,NULL),
+ (6,'olosko meu, ta me desfiando ','duas pessoas idiotas passando verhonha',2,'asdhaushdasha\r\n',NULL,NULL),
+ (7,'projeto','projeto de teste ae ',3,'dar certo kkkkkkkkkkjj',NULL,NULL);
+/*!40000 ALTER TABLE `projeto` ENABLE KEYS */;
+
+
+
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
